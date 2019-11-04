@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiabaor.dao.UserMapper">
+	<resultMap type="com.jiabaor.pojo.User"
+		id="providerListAllAndRole">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="userCode" jdbcType="VARCHAR"
+			property="userCode" />
+		<result column="userName" jdbcType="VARCHAR"
+			property="userName" />
+		<result column="userPassword" jdbcType="VARCHAR"
+			property="userPassword" />
+		<result column="gender" jdbcType="VARCHAR" property="gender" />
+		<result column="createdBy" jdbcType="BIGINT"
+			property="createdBy" />
+		<result column="birthday" jdbcType="VARCHAR"
+			property="birthday" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="userRole" jdbcType="BIGINT" property="userRole" />
+		<result column="creationDate" jdbcType="TIMESTAMP"
+			property="creationDate" />
+		<association property="role"
+			javaType="com.jiabaor.pojo.Role">
+			<id column="rId" property="rId" />
+			<result column="roleName" property="roleName" />
+			<result column="createdBy" property="createdBy" />
+			<result column="creationDate" property="creationDate" />
+		</association>
+	</resultMap>
+	<sql id="Base_Column_List">
+		e.id,e.userCode,e.userName,e.userPassword,e.gender,e.birthday,e.phone,e.address,
+		e.userRole,e.createdBy,e.creationDate,d.id,d.roleName,d.createdBy,d.creationDate
+	</sql>
+	<select id="UserLogin" parameterType="String"
+		resultType="com.jiabaor.pojo.User">
+		select
+		*
+		from user e left join role r ON e.userRole=r.rId
+		<where>
+			userCode=#{userCode} and userPassword=#{userPassword}
+		</where>
+	</select>
+	<select id="userById" resultMap="providerListAllAndRole"
+		parameterType="java.lang.Integer">
+		select
+		*
+		from user u left
+		join
+		role r ON u.userRole=r.rId
+		<where>
+			u.id=#{id}
+		</where>
+	</select>
+	<select id="userByIdDtail" parameterType="java.lang.Integer"
+		resultMap="providerListAllAndRole">
+		select
+		*
+		from user u left
+		join
+		role r ON u.userRole=r.rId
+		<where>
+			u.id=#{id}
+		</where>
+	</select>
+	<update id="updateUserById"
+		parameterType="com.jiabaor.pojo.User">
+		update user set
+		gender=#{gender,jdbcType=VARCHAR},
+		birthday=#{birthday,jdbcType=VARCHAR},
+		userName=#{userName,jdbcType=VARCHAR},
+		phone=#{phone,jdbcType=VARCHAR},
+		address=#{address,jdbcType=VARCHAR},
+		userRole=#{userRole,jdbcType=INTEGER}
+		<where>
+			id=#{id}
+		</where>
+	</update>
+	<update id="updatePasswordById">
+		update user set userPassword=#{userPassword}
+		<where>
+			id=#{id}
+		</where>
+	</update>
+</mapper>

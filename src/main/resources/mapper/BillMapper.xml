@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiabaor.dao.BillMapper">
+	<resultMap id="BaseResultMap" type="com.jiabaor.pojo.Bill">
+		<id column="bId" jdbcType="BIGINT" property="bId" />
+		<result column="billCode" jdbcType="VARCHAR"
+			property="billCode" />
+		<result column="productName" jdbcType="VARCHAR"
+			property="productName" />
+		<result column="productDesc" jdbcType="VARCHAR"
+			property="productDesc" />
+		<result column="productUnit" jdbcType="VARCHAR"
+			property="productUnit" />
+		<result column="productCount" jdbcType="DECIMAL"
+			property="productCount" />
+		<result column="totalPrice" jdbcType="DECIMAL"
+			property="totalPrice" />
+		<result column="isPayment" jdbcType="INTEGER"
+			property="isPayment" />
+		<result column="createdByUser" jdbcType="BIGINT"
+			property="createdByUser" />
+		<result column="creationDateBl" jdbcType="TIMESTAMP"
+			property="creationDateBl" />
+		<result column="providerId" jdbcType="BIGINT"
+			property="providerId" />
+		<result column="productImg" jdbcType="VARCHAR"
+			property="productImg" />
+		<!-- 指定联合查询出的部门字段的封装 -->
+		<association property="provider"
+			javaType="com.jiabaor.pojo.Provider">
+			<id column="pId" property="pId" />
+			<result column="proCode" property="proCode" />
+			<result column="proName" property="proName" />
+			<result column="proDesc" property="proDesc" />
+			<result column="proContact" property="proContact" />
+			<result column="proPhone" property="proPhone" />
+			<result column="proAddress" property="proAddress" />
+			<result column="proFax" property="proFax" />
+			<result column="createdByBill" property="createdByBill" />
+			<result column="creationDatePro" property="creationDatePro" />
+		</association>
+	</resultMap>
+	<sql id="selectByExample_List">
+		b.bId,b.billCode,b.productName,b.productDesc,b.productUnit,b.productCount,b.totalPrice,b.isPayment,b.createdByUser
+		,b.creationDateBl,b.providerId,b.productImg,
+		p.pId,p.proCode,p.proName,p.proDesc,p.proContact,p.proPhone,p.proAddress,p.proFax,p.createdByBill,p.creationDatePro
+	</sql>
+	<sql id="Base_Column_List">
+		p.pId,p.proCode,p.proName,p.proDesc,p.proContact,p.proPhone,p.proAddress,p.proFax,p.createdByBill,p.creationDatePro
+	</sql>
+	<select id="selectByExampleWithDept" resultMap="BaseResultMap"
+		parameterType="Integer">
+		select
+		distinct
+		<include refid="selectByExample_List" />
+		from user u left join bill b on u.createdBy=b.createdByUser left join
+		provider p on b.providerId=p.pId
+		<where>
+			u.id=#{id}
+		</where>
+	</select>
+	<select id="providListByName" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		distinct
+		<include refid="Base_Column_List" />
+		from user u left join
+		provider p on u.createdBy=p.createdByBill
+		<where>
+			u.id=#{id}
+		</where>
+	</select>
+	<select id="selectFrom" resultMap="BaseResultMap" parameterType="com.jiabaor.pojo.Search">
+		select
+		distinct
+		<include refid="selectByExample_List" />
+		from user u left join bill b on u.createdBy=b.createdByUser left join
+		provider p on b.providerId=p.pId
+		<where>
+			u.id=#{id}
+			<if test="productName!=null and productName!=''">
+				and b.productName like '%${productName}%'
+			</if>
+			<if test="isPayment!=null and isPayment!=''">
+				and b.isPayment=#{isPayment}
+			</if>
+			<if test="proName!=null and proName!=''">
+				and p.proName=#{proName}
+			</if>
+		</where>
+	</select>
+	<select id="getByIdDtail" resultMap="BaseResultMap"
+		parameterType="Integer">
+		select * from bill b left join provider p on b.providerId=p.pId
+		<where>
+			b.bId=#{id}
+		</where>
+	</select>
+	<update id="updateDtailByid"
+		parameterType="com.jiabaor.pojo.Bill">
+		update bill
+		set billCode = #{billCode,jdbcType=VARCHAR},
+		productName =
+		#{productName,jdbcType=VARCHAR},
+		productUnit =
+		#{productUnit,jdbcType=VARCHAR},
+		productCount =
+		#{productCount,jdbcType=DECIMAL},
+		totalPrice =
+		#{totalPrice,jdbcType=DECIMAL},
+		isPayment =
+		#{isPayment,jdbcType=INTEGER},
+		providerId =
+		#{providerId,jdbcType=BIGINT}
+		<where>
+			bId = #{bId,jdbcType=BIGINT}
+		</where>
+	</update>
+	<delete id="ordereDeleteDtail" parameterType="Integer">
+		delete from bill
+		<where>
+			bId=#{bId}
+		</where>
+	</delete>
+	<insert id="addOrderById" parameterType="com.jiabaor.pojo.Bill">
+		insert into bill
+		(
+		billCode,productName,productUnit,productCount,totalPrice,
+		isPayment,providerId,productDesc,createdByUser,creationDateBl
+		,productImg
+		)
+		values(billCode = #{billCode,jdbcType=VARCHAR},
+		#{productName,jdbcType=VARCHAR},
+		#{productUnit,jdbcType=VARCHAR},
+		#{productDesc,jdbcType=VARCHAR},
+		#{productImg,jdbcType=VARCHAR},
+		#{productCount,jdbcType=DECIMAL},
+		#{totalPrice,jdbcType=DECIMAL},
+		#{isPayment,jdbcType=INTEGER},
+		#{creationDateBl,jdbcType=INTEGER},
+		#{providerId,jdbcType=BIGINT}
+		#{createdByUser,jdbcType=BIGINT}
+		)
+	</insert>
+</mapper>

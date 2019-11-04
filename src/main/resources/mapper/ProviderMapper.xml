@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiabaor.dao.ProviderMapper">
+	<resultMap id="BaseResultMap"
+		type="com.jiabaor.pojo.Provider">
+		<id column="pId" jdbcType="BIGINT" property="pId" />
+		<result column="proCode" jdbcType="VARCHAR" property="proCode" />
+		<result column="proName" jdbcType="VARCHAR" property="proName" />
+		<result column="proDesc" jdbcType="VARCHAR" property="proDesc" />
+		<result column="proContact" jdbcType="VARCHAR"
+			property="proContact" />
+		<result column="proPhone" jdbcType="VARCHAR"
+			property="proPhone" />
+		<result column="proAddress" jdbcType="VARCHAR"
+			property="proAddress" />
+		<result column="proFax" jdbcType="VARCHAR" property="proFax" />
+		<result column="createdByBill" jdbcType="BIGINT"
+			property="createdByBill" />
+		<result column="creationDatePro" jdbcType="TIMESTAMP"
+			property="creationDatePro" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value"
+										item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value"
+										item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<select id="selectByExample"
+		parameterType="com.jiabaor.pojo.ProviderExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from provider
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from provider
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		provider
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.jiabaor.pojo.ProviderExample">
+		delete from provider
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.jiabaor.pojo.Provider">
+		insert into provider (id,
+		proCode, proName,
+		proDesc, proContact, proPhone,
+		proAddress, proFax,
+		createdBy,
+		creationDate)
+		values (#{id,jdbcType=BIGINT},
+		#{procode,jdbcType=VARCHAR},
+		#{proname,jdbcType=VARCHAR},
+		#{prodesc,jdbcType=VARCHAR}, #{procontact,jdbcType=VARCHAR},
+		#{prophone,jdbcType=VARCHAR},
+		#{proaddress,jdbcType=VARCHAR},
+		#{profax,jdbcType=VARCHAR},
+		#{createdby,jdbcType=BIGINT},
+		#{creationdate,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.jiabaor.pojo.Provider">
+		insert into provider
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="procode != null">
+				proCode,
+			</if>
+			<if test="proname != null">
+				proName,
+			</if>
+			<if test="prodesc != null">
+				proDesc,
+			</if>
+			<if test="procontact != null">
+				proContact,
+			</if>
+			<if test="prophone != null">
+				proPhone,
+			</if>
+			<if test="proaddress != null">
+				proAddress,
+			</if>
+			<if test="profax != null">
+				proFax,
+			</if>
+			<if test="createdby != null">
+				createdBy,
+			</if>
+			<if test="creationdate != null">
+				creationDate,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="procode != null">
+				#{procode,jdbcType=VARCHAR},
+			</if>
+			<if test="proname != null">
+				#{proname,jdbcType=VARCHAR},
+			</if>
+			<if test="prodesc != null">
+				#{prodesc,jdbcType=VARCHAR},
+			</if>
+			<if test="procontact != null">
+				#{procontact,jdbcType=VARCHAR},
+			</if>
+			<if test="prophone != null">
+				#{prophone,jdbcType=VARCHAR},
+			</if>
+			<if test="proaddress != null">
+				#{proaddress,jdbcType=VARCHAR},
+			</if>
+			<if test="profax != null">
+				#{profax,jdbcType=VARCHAR},
+			</if>
+			<if test="createdby != null">
+				#{createdby,jdbcType=BIGINT},
+			</if>
+			<if test="creationdate != null">
+				#{creationdate,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.jiabaor.pojo.ProviderExample"
+		resultType="java.lang.Long">
+		select count(*) from provider
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update provider
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.procode != null">
+				proCode = #{record.procode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.proname != null">
+				proName = #{record.proname,jdbcType=VARCHAR},
+			</if>
+			<if test="record.prodesc != null">
+				proDesc = #{record.prodesc,jdbcType=VARCHAR},
+			</if>
+			<if test="record.procontact != null">
+				proContact = #{record.procontact,jdbcType=VARCHAR},
+			</if>
+			<if test="record.prophone != null">
+				proPhone = #{record.prophone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.proaddress != null">
+				proAddress = #{record.proaddress,jdbcType=VARCHAR},
+			</if>
+			<if test="record.profax != null">
+				proFax = #{record.profax,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createdby != null">
+				createdBy = #{record.createdby,jdbcType=BIGINT},
+			</if>
+			<if test="record.creationdate != null">
+				creationDate = #{record.creationdate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update provider
+		set id = #{record.id,jdbcType=BIGINT},
+		proCode =
+		#{record.procode,jdbcType=VARCHAR},
+		proName =
+		#{record.proname,jdbcType=VARCHAR},
+		proDesc =
+		#{record.prodesc,jdbcType=VARCHAR},
+		proContact =
+		#{record.procontact,jdbcType=VARCHAR},
+		proPhone =
+		#{record.prophone,jdbcType=VARCHAR},
+		proAddress =
+		#{record.proaddress,jdbcType=VARCHAR},
+		proFax =
+		#{record.profax,jdbcType=VARCHAR},
+		createdBy =
+		#{record.createdby,jdbcType=BIGINT},
+		creationDate =
+		#{record.creationdate,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.jiabaor.pojo.Provider">
+		update provider
+		<set>
+			<if test="procode != null">
+				proCode = #{procode,jdbcType=VARCHAR},
+			</if>
+			<if test="proname != null">
+				proName = #{proname,jdbcType=VARCHAR},
+			</if>
+			<if test="prodesc != null">
+				proDesc = #{prodesc,jdbcType=VARCHAR},
+			</if>
+			<if test="procontact != null">
+				proContact = #{procontact,jdbcType=VARCHAR},
+			</if>
+			<if test="prophone != null">
+				proPhone = #{prophone,jdbcType=VARCHAR},
+			</if>
+			<if test="proaddress != null">
+				proAddress = #{proaddress,jdbcType=VARCHAR},
+			</if>
+			<if test="profax != null">
+				proFax = #{profax,jdbcType=VARCHAR},
+			</if>
+			<if test="createdby != null">
+				createdBy = #{createdby,jdbcType=BIGINT},
+			</if>
+			<if test="creationdate != null">
+				creationDate = #{creationdate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="providerDtailById" resultMap="BaseResultMap"
+		parameterType="Integer">
+		select * from provider
+		<where>
+			pId=#{id}
+		</where>
+	</select>
+	<update id="updateDtailByid"
+		parameterType="com.jiabaor.pojo.Provider">
+		update provider
+		set proCode = #{proCode,jdbcType=VARCHAR},
+		proName =
+		#{proName,jdbcType=VARCHAR},
+		proContact =
+		#{proContact,jdbcType=VARCHAR},
+		proPhone =
+		#{proPhone,jdbcType=VARCHAR},
+		proAddress =
+		#{proAddress,jdbcType=VARCHAR},
+		proFax =
+		#{proFax,jdbcType=VARCHAR},
+		proDesc =
+		#{proDesc,jdbcType=VARCHAR}
+		<where>
+			pId = #{pId,jdbcType=BIGINT}
+		</where>
+	</update>
+	<delete id="ordereDeleteDtailById" parameterType="Integer">
+		delete from provider
+		<where>
+			pId=#{id}
+		</where>
+	</delete>
+	<sql id="Base_Column_List">
+		p.pId, p.proCode, p.proName, p.proDesc, p.proContact,
+		p.proPhone,
+		p.proAddress, p.proFax, p.createdByBill,
+		p.creationDatePro
+	</sql>
+	<select id="getProvidListByName" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select DISTINCT
+		<include refid="Base_Column_List" />
+		from provider p left join user u on u.createdBy=p.createdByBill left
+		join bill b on b.createdByUser=u.createdBy
+		<where>
+			u.id=#{id}
+		</where>
+	</select>
+	<insert id="addProviderByUser"
+		parameterType="com.jiabaor.pojo.Provider">
+		insert into provider (
+		proCode, proName,
+		proDesc,
+		proContact, proPhone,
+		proAddress, proFax,
+		createdByBill,
+		creationDatePro)
+		values
+		(#{proCode,jdbcType=VARCHAR},
+		#{proName,jdbcType=VARCHAR},
+		#{proDesc,jdbcType=VARCHAR},
+		#{proContact,jdbcType=VARCHAR},
+		#{proPhone,jdbcType=VARCHAR},
+		#{proAddress,jdbcType=VARCHAR},
+		#{proFax,jdbcType=VARCHAR},
+		#{createdByBill,jdbcType=BIGINT},
+		#{creationDatePro,jdbcType=TIMESTAMP})
+	</insert>
+	<select id="selectProviderConditionsById" resultMap="BaseResultMap">
+		select DISTINCT
+		<include refid="Base_Column_List" />
+		from provider p left join user u on u.createdBy=p.createdByBill left
+		join bill b on b.createdByUser=u.createdBy
+		<where>
+			u.id=#{id}
+		<if test="queryProCode!=null">
+			and p.proCode like '${queryProCode}$'
+		</if>
+		<if test="queryProName!=null">
+			and p.proName like '${queryProName}$'
+		</if>
+		</where>
+	</select>
+</mapper>
